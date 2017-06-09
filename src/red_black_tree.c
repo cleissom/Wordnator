@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <string.h>
+
 #include "red_black_tree.h"
 
 struct rb_tree {
@@ -12,15 +14,13 @@ struct rb_node {
     rb_node_t*  esquerda;
     rb_node_t*  direita;
     rb_node_t*  pai;
-    cor_t       cor;
+    cor_t      cor;
 };
 
-enum cor {PRETO, VERMELHO};
+rb_tree_t* cria_arvore(void){
+    rb_tree_t* arvore = malloc(sizeof(rb_tree_t));
 
-rb_node_t* cria_arvore(void){
-    rb_tree_t* arvore = mallcoc(sizeof(rb_tree_t));
-
-    if(!v){perror("cria_arvore"); exit(EXIT_FAILURE);};
+    if(!arvore){perror("cria_arvore"); exit(EXIT_FAILURE);};
 
     return arvore;
 }
@@ -28,7 +28,7 @@ rb_node_t* cria_arvore(void){
 rb_node_t* cria_no_arvore(void* dado){
     rb_node_t* node = malloc(sizeof(rb_node_t));
 
-    if(!v){perror("cria_no_arvore"); exit(EXIT_FAILURE);};
+    if(!node){perror("cria_no_arvore"); exit(EXIT_FAILURE);};
 
     node->dado     = dado;
     node->esquerda = NULL;
@@ -36,12 +36,12 @@ rb_node_t* cria_no_arvore(void* dado){
     node->pai      = NULL;
     node->cor      = VERMELHO;
 
-    return v;
+    return node;
 }
 
 rb_node_t* get_avo(rb_node_t* node){
     if ((node) && (node->pai)){
-        return (v->pai)->pai;
+        return (node->pai)->pai;
     }
     else
         return NULL;
@@ -68,7 +68,7 @@ void rotacao_esquerda (rb_tree_t* arvore, rb_node_t* node){
     }
     no_temp->pai = node->pai;
 
-    if(!node->parent)
+    if(!node->pai)
         arvore->raiz = no_temp;
     else if(node == node->pai->esquerda)
         node->pai->esquerda = no_temp;
@@ -111,7 +111,7 @@ void inserir_no_arvore(rb_tree_t* arvore, rb_node_t* node){
     correcao_arvore(arvore,node);
 }
 
-void compara_no(rb_node_t* node_1, rb_node_t* node_2){
+int compara_no(rb_node_t* node_1, rb_node_t* node_2){
     int ret;
     ret = strcmp(obtem_chave(node_1->dado),obtem_chave(node_2->dado));
     return ret;
