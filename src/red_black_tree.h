@@ -9,7 +9,7 @@ typedef enum cor {PRETO, VERMELHO} cor_t;
 
 rb_tree_t* cria_arvore(void);
 
-rb_node_t* cria_no_arvore(void* dado);
+rb_node_t* cria_no_arvore(rb_tree_t* arvore, void* dado);
 
 rb_node_t* get_avo(rb_node_t* node);
 
@@ -20,6 +20,8 @@ void rotacao_esquerda (rb_tree_t* arvore, rb_node_t* node);
 void rotacao_direita (rb_tree_t* arvore, rb_node_t* node);
 
 void inserir_no_arvore(rb_tree_t* arvore, rb_node_t* node);
+
+void inserir_arvore(rb_tree_t* arvore, void* dado);
 
 int compara_no(rb_node_t* node_1, rb_node_t* node_2);
 

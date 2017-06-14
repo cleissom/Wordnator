@@ -13,23 +13,16 @@ struct palavra {
 palavra_t* cria_palavra (char* chave, char* significado){
 
     palavra_t* palavra = malloc(sizeof(palavra_t));
-    if (palavra == NULL){
-        perror ("malloc palavra");
-        exit(EXIT_FAILURE);
-    }
+    if(!palavra){perror("cria_palavra"); exit(EXIT_FAILURE);};
 
     palavra->chave = malloc (strlen(chave)+1);
-    if (palavra->chave == NULL){
-        perror ("malloc chave");
-        exit(EXIT_FAILURE);
-    }
+    if(!palavra->chave){perror("cria_no_arvore: chave"); exit(EXIT_FAILURE);};
+
     strcpy (palavra->chave, chave);
 
     palavra->significado = malloc (strlen(significado)+1);
-    if (palavra->significado == NULL){
-        perror ("malloc significado");
-        exit(EXIT_FAILURE);
-    }
+    if(!palavra->significado){perror("cria_no_arvore: significado"); exit(EXIT_FAILURE);};
+
     strcpy (palavra->significado, significado);
 
     return palavra;
