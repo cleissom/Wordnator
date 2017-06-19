@@ -211,3 +211,41 @@ void correcao_arvore(rb_tree_t* arvore, rb_node_t* node){
     }
     arvore->raiz->cor = PRETO;
 }
+
+int print_dot(FILE* file, rb_tree_t* arvore, rb_node_t* node, int number)
+{
+    int next_number = number;
+
+    if(node->cor == VERMELHO)
+        fprintf(file,"\tnode_%d[label=\"%s\" fontcolor=\"white\" style=\"filled\" fillcolor=\"red3\"];\n", number, obtem_chave(node->dado));
+    else
+        fprintf(file,"\tnode_%d[label=\"%s\" fontcolor=\"white\" style=\"filled\" fillcolor=\"black\"];\n", number, obtem_chave(node->dado));
+
+    if(node->esquerda != arvore->sentinela){
+        fprintf(file,"\tnode_%d -> node_%d;\n", number, next_number+1);
+        next_number = print_dot(file, arvore, node->esquerda, next_number+1);
+    }
+
+    if(node->direita != arvore->sentinela){
+        fprintf(file,"\tnode_%d -> node_%d;\n", number, next_number+1);
+        next_number = print_dot(file, arvore, node->direita, next_number+1);
+    }
+
+    return next_number++;
+}
+
+void exportar_arvore_dot(const char* filename, rb_tree_t* arvore)
+{
+    if(!filename || !arvore){perror("leitura_arquivo: fp"); exit(EXIT_FAILURE);};
+
+	FILE* file = fopen(filename,"w");
+
+    if(!file){perror("leitura_arquivo: file"); exit(EXIT_FAILURE);};
+
+	fprintf(file, "digraph {\n");
+
+    print_dot(file, arvore, arvore->raiz, 0);
+
+	fprintf(file, "}\n");
+	fclose(file);
+}
