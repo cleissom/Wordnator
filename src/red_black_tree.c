@@ -8,7 +8,6 @@
 struct rb_tree {
     rb_node_t* raiz;
     rb_node_t* sentinela;
-
 };
 
 struct rb_node {
@@ -77,6 +76,26 @@ rb_node_t* get_tio(rb_node_t* node){
     }
     else
         return avo->esquerda;
+}
+
+rb_node_t* obtem_raiz (rb_tree_t* arvore){
+        return arvore->raiz;
+}
+
+rb_node_t* obtem_sentinela (rb_tree_t* arvore){
+        return arvore->sentinela;
+}
+
+void* obtem_dado (rb_node_t* node){
+        return node->dado;
+}
+
+rb_node_t* obtem_no_esquerda (rb_node_t* node){
+        return node->esquerda;
+}
+
+rb_node_t* obtem_no_direita (rb_node_t* node){
+        return node->direita;
 }
 
 void rotacao_esquerda (rb_tree_t* arvore, rb_node_t* node){
@@ -212,6 +231,8 @@ void correcao_arvore(rb_tree_t* arvore, rb_node_t* node){
     arvore->raiz->cor = PRETO;
 }
 
+
+
 int print_dot(FILE* file, rb_tree_t* arvore, rb_node_t* node, int number)
 {
     int next_number = number;
@@ -234,7 +255,7 @@ int print_dot(FILE* file, rb_tree_t* arvore, rb_node_t* node, int number)
     return next_number++;
 }
 
-void exportar_arvore_dot(const char* filename, rb_tree_t* arvore)
+void exportar_arvore_dot(char* filename, rb_tree_t* arvore)
 {
     if(!filename || !arvore){perror("leitura_arquivo: fp"); exit(EXIT_FAILURE);};
 
@@ -242,7 +263,7 @@ void exportar_arvore_dot(const char* filename, rb_tree_t* arvore)
 
     if(!file){perror("leitura_arquivo: file"); exit(EXIT_FAILURE);};
 
-	fprintf(file, "digraph {\n");
+	fprintf(file, "digraph { \n node [shape=\"circle\" fixedsize=\"true\" width=1.2 height=1.2 style=\"filled\"];\n");
 
     print_dot(file, arvore, arvore->raiz, 0);
 

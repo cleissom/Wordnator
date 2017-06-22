@@ -1,41 +1,69 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <wchar.h>
 
 #include "leitura.h"
 #include "palavra.h"
 #include "red_black_tree.h"
 
 #define CHAVE_SIZE       50
-#define SIGNIFICADO_SIZE 300
+#define SIGNIFICADO_SIZE 6200
 
+//#define DEBUG
 
 rb_tree_t* leitura_arquivo (char* nome_arq){
     rb_tree_t* arvore = cria_arvore();
 
-    wchar_t chave[CHAVE_SIZE];
-    wchar_t significado[SIGNIFICADO_SIZE];
-    int  i = 0;
+    char chave[CHAVE_SIZE];
+    char significado[SIGNIFICADO_SIZE];
+
+    #ifdef PRINT_TREE
+    int i = 0;
+    char buffer [10];
+    #endif // PRINT_TREE
 
     FILE* fp = fopen (nome_arq, "r");
-    if(!fp){perror("leitura_arquivo: fp"); exit(EXIT_FAILURE);};
-
-    char teste[] = "Bananão";
+    if(!fp){perror("leitura_arquivo:"); exit(EXIT_FAILURE);};
 
     while (1){
-        fwscanf (fp, L"\"%[^\"]\",\"%[^\"]\"", chave, significado);
+        fscanf (fp, "\"%[^\"]\",\"%[^\"]\"", chave, significado);
         fgetc (fp);
 
         palavra_t* palavra = cria_palavra(chave, significado);
 
         inserir_arvore(arvore, palavra);
 
-        printf("chave: .%s. significado: .%s.\n\n", chave, significado);
-        if (feof(fp)){
-            break;
-        }
+        #ifdef PRINT_TREE
+        sprintf(buffer,"%d.dot",i++);
+        exportar_arvore_dot(buffer, arvore);
+        #endif // PRINT_TREE
+
+//        printf("chave: .%s. significado: .%s.\n\n", chave, significado);
+
+        if (feof(fp)){ break; }
     }
+
     return arvore;
 }
 
+palavra_t* procura_palavra (rb_tree_t* arvore, char* chave){
+    rb_node_t*  percursor       = NULL;
+    rb_node_t*  sentinela       = NULL;
+    palavra_t*  palavra         = NULL;
+    char*       chave_percursor = NULL;
+
+    percursor = obtem_raiz(arvore);
+    sentinela = obtem_sentinela(arvore);
+
+    while (percursor != sentinela){
+        palavra = obtem_dado(percursor);
+        chave_percursor = obtem_chave(palavra);
+        if (strcmp(chave, chave_percursor) == 0)
+            return palavra;
+        else if (strcmp(chave, chave_percursor) < 0)
+            percursor = obtem_no_esquerda(percursor);
+        else
+            percursor = obtem_no_direita(percursor);
+    }
+    return NULL;
+}
