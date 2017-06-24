@@ -4,6 +4,7 @@
 #include <string.h>
 
 #include "red_black_tree.h"
+#include "palavra.h"
 
 struct rb_tree {
     rb_node_t* raiz;
@@ -59,23 +60,12 @@ rb_node_t* cria_no_arvore(rb_tree_t* arvore, void* dado){
     return node;
 }
 
-rb_node_t* get_avo(rb_node_t* node){
+static rb_node_t* get_avo(rb_node_t* node){
     if ((node) && (node->pai)){
         return (node->pai)->pai;
     }
     else
         return NULL;
-}
-
-rb_node_t* get_tio(rb_node_t* node){
-    rb_node_t* avo = get_avo(node);
-    if (!avo){
-        return NULL;
-    } else if (node->pai == avo->esquerda){
-        return avo->direita;
-    }
-    else
-        return avo->esquerda;
 }
 
 rb_node_t* obtem_raiz (rb_tree_t* arvore){
@@ -98,7 +88,7 @@ rb_node_t* obtem_no_direita (rb_node_t* node){
         return node->direita;
 }
 
-void rotacao_esquerda (rb_tree_t* arvore, rb_node_t* node){
+static void rotacao_esquerda (rb_tree_t* arvore, rb_node_t* node){
     rb_node_t* no_temp = NULL;
     no_temp = node->direita;
     node->direita = no_temp->esquerda;
@@ -119,7 +109,7 @@ void rotacao_esquerda (rb_tree_t* arvore, rb_node_t* node){
     node->pai         = no_temp;
 }
 
-void rotacao_direita (rb_tree_t* arvore, rb_node_t* node){
+static void rotacao_direita (rb_tree_t* arvore, rb_node_t* node){
     rb_node_t* no_temp = NULL;
     no_temp = node->esquerda;
     node->esquerda = no_temp->direita;
@@ -140,45 +130,7 @@ void rotacao_direita (rb_tree_t* arvore, rb_node_t* node){
     node->pai         = no_temp;
 }
 
-void inserir_no_arvore(rb_tree_t* arvore, rb_node_t* node){
-    rb_node_t *no_anterior = arvore->sentinela;
-    rb_node_t *no_temp = arvore->raiz;
-
-    while(no_temp != arvore->sentinela){
-        no_anterior = no_temp;
-        if(compara_no(node,no_temp) < 0)
-            no_temp = no_temp->esquerda;
-        else
-            no_temp = no_temp->direita;
-    }
-
-    node->pai = no_anterior;
-
-    if(no_anterior == arvore->sentinela)
-        arvore->raiz = node;
-    else if(compara_no(node,no_anterior) < 0)
-        no_anterior->esquerda = node;
-    else
-        no_anterior->direita = node;
-
-    node->esquerda = arvore->sentinela;
-    node->direita  = arvore->sentinela;
-    node->cor      = VERMELHO;
-
-    correcao_arvore(arvore,node);
-}
-
-void inserir_arvore(rb_tree_t* arvore, void* dado){
-    if(!arvore){perror("inserir_arvore: arvore"); exit(EXIT_FAILURE);};
-    if(!dado){perror("inserir_arvore: dado"); exit(EXIT_FAILURE);};
-
-    rb_node_t* node = cria_no_arvore(arvore, dado);
-    if(!node){perror("inserir_arvore: node"); exit(EXIT_FAILURE);};
-
-    inserir_no_arvore(arvore,node);
-}
-
-int compara_no(rb_node_t* node_1, rb_node_t* node_2){
+static int compara_no(rb_node_t* node_1, rb_node_t* node_2){
     int ret;
 
     if(!node_1 || !node_2) {return -1;};
@@ -187,7 +139,7 @@ int compara_no(rb_node_t* node_1, rb_node_t* node_2){
     return ret;
 }
 
-void correcao_arvore(rb_tree_t* arvore, rb_node_t* node){
+static void correcao_arvore(rb_tree_t* arvore, rb_node_t* node){
     rb_node_t* no_temp = NULL;
 
     while(node->pai->cor == VERMELHO){
@@ -231,7 +183,43 @@ void correcao_arvore(rb_tree_t* arvore, rb_node_t* node){
     arvore->raiz->cor = PRETO;
 }
 
+static void inserir_no_arvore(rb_tree_t* arvore, rb_node_t* node){
+    rb_node_t *no_anterior = arvore->sentinela;
+    rb_node_t *no_temp = arvore->raiz;
 
+    while(no_temp != arvore->sentinela){
+        no_anterior = no_temp;
+        if(compara_no(node,no_temp) < 0)
+            no_temp = no_temp->esquerda;
+        else
+            no_temp = no_temp->direita;
+    }
+
+    node->pai = no_anterior;
+
+    if(no_anterior == arvore->sentinela)
+        arvore->raiz = node;
+    else if(compara_no(node,no_anterior) < 0)
+        no_anterior->esquerda = node;
+    else
+        no_anterior->direita = node;
+
+    node->esquerda = arvore->sentinela;
+    node->direita  = arvore->sentinela;
+    node->cor      = VERMELHO;
+
+    correcao_arvore(arvore,node);
+}
+
+void inserir_arvore(rb_tree_t* arvore, void* dado){
+    if(!arvore){perror("inserir_arvore: arvore"); exit(EXIT_FAILURE);};
+    if(!dado){perror("inserir_arvore: dado"); exit(EXIT_FAILURE);};
+
+    rb_node_t* node = cria_no_arvore(arvore, dado);
+    if(!node){perror("inserir_arvore: node"); exit(EXIT_FAILURE);};
+
+    inserir_no_arvore(arvore,node);
+}
 
 int print_dot(FILE* file, rb_tree_t* arvore, rb_node_t* node, int number)
 {
@@ -263,7 +251,7 @@ void exportar_arvore_dot(char* filename, rb_tree_t* arvore)
 
     if(!file){perror("leitura_arquivo: file"); exit(EXIT_FAILURE);};
 
-	fprintf(file, "digraph { \n node [shape=\"circle\" fixedsize=\"true\" width=1.2 height=1.2 style=\"filled\"];\n");
+	fprintf(file, "digraph { \n node [shape=\"circle\" fixedsize=\"true\" width=1 height=1 style=\"filled\"];\n");
 
     print_dot(file, arvore, arvore->raiz, 0);
 

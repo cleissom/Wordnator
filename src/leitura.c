@@ -6,10 +6,7 @@
 #include "palavra.h"
 #include "red_black_tree.h"
 
-#define CHAVE_SIZE       50
-#define SIGNIFICADO_SIZE 6200
-
-//#define DEBUG
+//#define PRINT_TREE
 
 rb_tree_t* leitura_arquivo (char* nome_arq){
     rb_tree_t* arvore = cria_arvore();
@@ -47,18 +44,21 @@ rb_tree_t* leitura_arquivo (char* nome_arq){
 }
 
 palavra_t* procura_palavra (rb_tree_t* arvore, char* chave){
-    rb_node_t*  percursor       = NULL;
-    rb_node_t*  sentinela       = NULL;
-    palavra_t*  palavra         = NULL;
-    char*       chave_percursor = NULL;
+    if(!arvore){perror("procura_palavra: arvore"); exit(EXIT_FAILURE);};
+    if(!chave) {perror("leitura_arquivo: chave");  exit(EXIT_FAILURE);};
+
+    rb_node_t* percursor       = NULL;
+    rb_node_t* sentinela       = NULL;
+    palavra_t* palavra         = NULL;
+    char*      chave_percursor = NULL;
 
     percursor = obtem_raiz(arvore);
     sentinela = obtem_sentinela(arvore);
 
     while (percursor != sentinela){
-        palavra = obtem_dado(percursor);
-        chave_percursor = obtem_chave(palavra);
-        if (strcmp(chave, chave_percursor) == 0)
+        palavra         = obtem_dado (percursor);
+        chave_percursor = obtem_chave (palavra);
+        if (strcmp (chave, chave_percursor) == 0)
             return palavra;
         else if (strcmp(chave, chave_percursor) < 0)
             percursor = obtem_no_esquerda(percursor);

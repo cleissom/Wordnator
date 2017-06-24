@@ -2,20 +2,33 @@
 #include <stdlib.h>
 #include <locale.h>
 
-#define _UNICODE
-
 #include "src/red_black_tree.h"
 #include "src/leitura.h"
+#include "src/palavra.h"
+#include "src/interface.h"
 
 int main()
 {
-    char* local;
-    local = setlocale(LC_ALL, "portuguese");
+    setlocale(LC_ALL, "portuguese");
 
     rb_tree_t* arvore;
+    palavra_t* palavra;
+    char chave[CHAVE_SIZE];
 
-    arvore = leitura_arquivo("dic_one_line.csv");
-    exportar_arvore_dot("tree.dot", arvore);
-    system("pause");
+    interface_intro();
 
+    arvore = leitura_arquivo("src/dic_one_line.csv");
+
+    while(1){
+        interface_obter_chave(chave);
+
+        palavra = procura_palavra(arvore, chave);
+
+        if(!palavra)
+            interface_imprimir_nao_encontrado();
+        else
+            interface_imprimir_palavra(palavra);
+    }
+
+    return 0;
 }
