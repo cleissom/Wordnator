@@ -16,7 +16,7 @@ struct rb_node {
     rb_node_t*  esquerda;
     rb_node_t*  direita;
     rb_node_t*  pai;
-    cor_t      cor;
+    cor_t       cor;
 };
 
 rb_node_t* cria_no_sentinela(void){
@@ -257,4 +257,27 @@ void exportar_arvore_dot(char* filename, rb_tree_t* arvore)
 
 	fprintf(file, "}\n");
 	fclose(file);
+}
+
+void free_arvore (rb_tree_t* arvore){
+    //malloc palavra, nós, sentinela, arvore
+    pos_ordem_free(arvore->raiz, arvore);
+    free(arvore->sentinela);
+    free (arvore);
+}
+
+void pos_ordem_free(rb_node_t* node, rb_tree_t* arvore){
+
+    if (node == arvore->sentinela)
+        return;
+
+    pos_ordem_free(node->esquerda, arvore);
+    pos_ordem_free(node->direita, arvore);
+
+    free_node(node);
+}
+
+void free_node (rb_node_t* node){
+    libera_palavra(node->dado);
+    free (node);
 }

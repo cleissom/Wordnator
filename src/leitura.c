@@ -20,7 +20,7 @@ rb_tree_t* leitura_arquivo (char* nome_arq){
     #endif // PRINT_TREE
 
     FILE* fp = fopen (nome_arq, "r");
-    if(!fp){perror("leitura_arquivo:"); exit(EXIT_FAILURE);};
+    if(!fp){perror("leitura_arquivo"); exit(EXIT_FAILURE);};
 
     while (1){
         fscanf (fp, "\"%[^\"]\",\"%[^\"]\"", chave, significado);
@@ -31,11 +31,9 @@ rb_tree_t* leitura_arquivo (char* nome_arq){
         inserir_arvore(arvore, palavra);
 
         #ifdef PRINT_TREE
-        sprintf(buffer,"%d.dot",i++);
+        sprintf(buffer,"red_black_%d.dot",i++);
         exportar_arvore_dot(buffer, arvore);
         #endif // PRINT_TREE
-
-//        printf("chave: .%s. significado: .%s.\n\n", chave, significado);
 
         if (feof(fp)){ break; }
     }
