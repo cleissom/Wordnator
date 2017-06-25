@@ -20,6 +20,7 @@ void interface_intro (void){
     clear_screen();
 
     printf("\tWORDNATOR\n\n\n");
+
     printf("Pressione enter para continuar...\n");
     fflush(stdin);
     getchar();
@@ -27,7 +28,7 @@ void interface_intro (void){
 
 void interface_obter_chave (char *chave){
     clear_screen();
-
+    printf("Digite exit para sair.\n");
     printf("Insira a palavra que deseja procurar: ");
 
     fflush(stdin);
