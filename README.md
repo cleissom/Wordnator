@@ -24,9 +24,6 @@ Para exportar o arquivo dot da árvore a cada inserção basta descomentar #defi
 ## Notas: 
 Programa versão Beta 0.92 - busca de palavras com acentuação não funciona completamente.
 
-## Contribuidores:
-Favor leia CONTRIBUTING.md para detalhes.
-
 ## Autores:
 Cleissom Fernandes da Silva
 
