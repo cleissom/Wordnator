@@ -29,6 +29,7 @@ Favor leia CONTRIBUTING.md para detalhes.
 
 ## Autores:
 Cleissom Fernandes da Silva
+
 Ian Schmiegelow Dannapel
 
 ## Licença:
