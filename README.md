@@ -10,7 +10,7 @@ Arquivo dicionário .csv (inlcuso), deve estar na forma: src/dic_one_line.csv
 
 ## Instalação: 
 
-Para execução em LINUX, comentar #define WINDOWS em interface.c
+Para execução em WINDOWS, usar #define WINDOWS em interface.c
 
 Compile os arquivos main.c; /src/interface.c; /src/leitura.c; /src/palavra.c; /src/red_black_tree.c
 
