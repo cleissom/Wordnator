@@ -37,7 +37,9 @@ rb_tree_t* leitura_arquivo (char* nome_arq){
 
         if (feof(fp)){ break; }
     }
-
+    
+    fclose(fp);
+    
     return arvore;
 }
 
