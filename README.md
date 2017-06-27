@@ -12,6 +12,10 @@ Arquivo dicionário .csv (inlcuso), deve estar na forma: src/dic_one_line.csv
 
 Para execução em WINDOWS, usar #define WINDOWS em interface.c
 
+Para compilar execute "make" com o Makefile incluso
+
+ou
+
 Compile os arquivos main.c; /src/interface.c; /src/leitura.c; /src/palavra.c; /src/red_black_tree.c
 
 ## Execução:
