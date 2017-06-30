@@ -5,11 +5,8 @@
 #include "leitura.h"
 #include "palavra.h"
 
-#define WINDOWS
-
-
 static void clear_screen(void){
-    #ifdef WINDOWS
+    #ifdef __MINGW32__
     system("cls");
     #else
     system("clear");
@@ -53,7 +50,7 @@ void interface_imprimir_palavra (palavra_t *palavra){
 void interface_imprimir_nao_encontrado (void){
     clear_screen();
 
-    printf("Palavra n„o encontrada.\n\n");
+    printf("Palavra n√£o encontrada.\n\n");
 
     printf("Pressione enter para pesquisar outra palavra...\n");
     fflush(stdin);
