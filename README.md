@@ -10,8 +10,6 @@ Arquivo dicionário .csv (inlcuso), deve estar na forma: src/dic_one_line.csv
 
 ## Instalação: 
 
-Para execução em WINDOWS, usar #define WINDOWS em interface.c
-
 Para compilar execute "make" com o Makefile incluso
 
 ou
